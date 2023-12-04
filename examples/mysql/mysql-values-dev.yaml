@@ -1,0 +1,29 @@
+global:
+  imageRegistry: "registry.stardream.link"
+  imagePullSecrets:
+  - stardreamkey
+  # storageClass: "ebs-ssd"
+  storageClass: "local"
+# image:
+#   repository: fronted-infra/mysql
+
+primary:
+  persistence:
+    size: 30Gi
+  service:
+    type: NodePort
+    nodePorts:
+      mysql: 30002
+    annotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "vpc.inf.mysql"
+      consul.register/service.health.tcp: "true"
+      consul.register/service.health.port: "30002"
+      consul.register/service.tags: "dev"
+auth:
+  ## @param auth.rootPassword Password for the `root` user. Ignored if existing secret is provided
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-the-root-password-on-first-run
+  ##
+  rootPassword: ""
+  username: ""
+  password: ""
